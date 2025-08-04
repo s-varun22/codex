@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { Filter } from "./components/Filter";
 import { ProductCard } from "../../components";
+import { Filter } from "./components/Filter";
 
 export const Products = () => {
 	const [show, setShow] = useState(false);
 	const [products, setProducts] = useState([]);
 
-	useEffect(()=>{
+	useEffect(() => {
 		const fetchProducts = async () => {
-			const response = await fetch("http://localhost:8000/products");
+			const response = await fetch(`http://localhost:8000/products/`);
 			const data = await response.json();
 			setProducts(data);
 		};
 		fetchProducts();
-	},[])
+	}, []);
 
 	return (
 		<main>

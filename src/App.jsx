@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { AppRoutes } from "./routes/AppRoutes";
 import { Footer, Header } from "./components";
+import { AppRoutes } from "./routes/AppRoutes";
 
 function App() {
 	return (

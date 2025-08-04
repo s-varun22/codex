@@ -2,6 +2,7 @@
 export { Home } from "./home/Home";
 
 // Products
+export { ProductDetail } from "./products/ProductDetail";
 export { Products } from "./products/Products";
 
 // Cart

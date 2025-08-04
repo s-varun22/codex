@@ -7,7 +7,7 @@ export const ProductCard = ({ product }) => {
 
 	return (
 		<div className="m-3 max-w-sm bg-white dark:border-gray-800 rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 ">
-			<Link to={`products/${id}`} className="relative">
+			<Link to={`/products/${id}`} className="relative">
 				{best_seller && (
 					<span className="absolute top-4 left-2 px-2 bg-orange-500 bg-opacity-90 text-white rounded">Best Seller</span>
 				)}
