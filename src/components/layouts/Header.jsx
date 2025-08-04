@@ -13,7 +13,7 @@ export const Header = () => {
 	}, [darkMode]);
 
 	return (
-		<header>
+		<header className="sticky top-0 z-50 w-full">
 			<nav className="bg-white border-gray-200 dark:bg-gray-900">
 				<div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
 					<Link to="/" className="flex items-center">

@@ -4,11 +4,11 @@ import { Footer, Header } from "./components";
 
 function App() {
 	return (
-		<>
+		<div className=" bg-white dark:bg-gray-900">
 			<Header />
 			<AppRoutes />
 			<Footer />
-		</>
+		</div>
 	);
 }
 
