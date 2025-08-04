@@ -1,8 +1,15 @@
+import { Faq } from "./components/Faq";
+import { FeaturedProducts } from "./components/FeaturedProducts";
+import { Jumbotron } from "./components/Jumbotron";
+import { Testimonials } from "./components/Testimonials";
 
 export const Home = () => {
 	return (
 		<main>
-			<div>Home</div>
+			<Jumbotron />
+			<FeaturedProducts />
+			<Testimonials />
+			<Faq />
 		</main>
 	);
 };
