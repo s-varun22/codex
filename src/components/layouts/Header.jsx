@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { applyDarkMode, getInitialDarkMode } from "../../utils/Theme";
+import { Search } from "../common/Search";
 
 export const Header = () => {
 	const [darkMode, setDarkMode] = useState(getInitialDarkMode);
+	const [searchVisible, setSearchVisible] = useState(false);
 
 	const cartList = 0;
 
@@ -33,7 +35,7 @@ export const Header = () => {
 							)}
 						</span>
 						<span
-							onClick={() => {}}
+							onClick={() => setSearchVisible(!searchVisible)}
 							className="cursor-pointer text-xl text-gray-700 dark:text-white mr-5 bi bi-search"></span>
 						<Link to="/cart" className="text-gray-700 dark:text-white mr-5">
 							<span className="text-2xl bi bi-cart-fill relative">
@@ -67,6 +69,7 @@ export const Header = () => {
 					</div>
 				</div>
 			</nav>
+			{searchVisible && <Search setSearchVisible={setSearchVisible} />}
 		</header>
 	);
 };

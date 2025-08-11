@@ -1,52 +1,87 @@
 import { useEffect, useState } from "react";
 import { ProductCard } from "../../components";
 import { Filter } from "./components/Filter";
+import { useLocation } from "react-router-dom";
+import { useTitle } from "../../hooks/useTitle.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { products } from "../../store/filterSlice";
 
 export const Products = () => {
+	const dispatch = useDispatch();
 	const [show, setShow] = useState(false);
-	const [products, setProducts] = useState([]);
+
+	const search = useLocation().search;
+	const queryTerm = new URLSearchParams(search).get("query");
+
+	useTitle(queryTerm ? `Search Results - ${queryTerm}` : "Explore eBooks");
+
+	const api = queryTerm ? `http://localhost:8000/products?name_like=${queryTerm}` : "http://localhost:8000/products/";
+
+	const { allProducts, inStockOnly, bestSellerOnly, sortBy, ratings } = useSelector((state) => state.filterState);
+
+	const filteredProducts = allProducts
+		.filter((product) => {
+			if (inStockOnly && !product.in_stock) return false;
+			if (bestSellerOnly && !product.best_seller) return false;
+			if (ratings) {
+				const minRating = parseInt(ratings.charAt(0)); // "4STARSABOVE" => 4
+				if (product.rating < minRating) return false;
+			}
+			return true;
+		})
+		.sort((a, b) => {
+			if (sortBy === "lowtohigh") return a.price - b.price;
+			if (sortBy === "hightolow") return b.price - a.price;
+			return 0;
+		});
 
 	useEffect(() => {
 		const fetchProducts = async () => {
-			const response = await fetch(`http://localhost:8000/products/`);
+			const response = await fetch(api);
 			const data = await response.json();
-			setProducts(data);
+			dispatch(products(data));
 		};
 		fetchProducts();
 	}, []);
 
 	return (
-		<main>
-			<section className="my-5">
+		<main className="flex flex-col lg:flex-row gap-6 px-4 py-6 relative">
+			{/* Sidebar (desktop only) */}
+			{show && (
+				<div className="">
+					<Filter setShow={setShow} />
+				</div>
+			)}
+
+			{/* Drawer (mobile only) */}
+			{show && (
+				<>
+					<div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setShow(!show)} />
+					<div className="fixed top-0 left-0 w-72 h-full bg-white dark:bg-gray-800 z-50 shadow-lg transition-transform transform translate-x-0 lg:hidden">
+						<Filter setShow={setShow} />
+					</div>
+				</>
+			)}
+			<section className="flex-1">
 				<div className="my-5 flex justify-between">
-					<span className="text-2xl font-semibold dark:text-slate-100 mb-5">All eBooks ({products.length})</span>
+					<span className="text-2xl font-semibold dark:text-slate-100 mb-5">
+						All eBooks ({filteredProducts.length})
+					</span>
 					<span>
 						<button
 							onClick={() => setShow(!show)}
-							id="dropdownMenuIconButton"
-							data-dropdown-toggle="dropdownDots"
-							className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-700"
-							type="button">
-							<svg
-								className="w-6 h-6"
-								aria-hidden="true"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg">
-								<path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-							</svg>
+							className=" text-gray-700 dark:text-white p-2 rounded-md border border-gray-300 dark:border-gray-600 mb-4">
+							<i className="bi bi-funnel-fill" />
 						</button>
 					</span>
 				</div>
 
 				<div className="flex flex-wrap justify-center lg:flex-row">
-					{products.map((product) => (
+					{filteredProducts.map((product) => (
 						<ProductCard key={product.id} product={product} />
 					))}
 				</div>
 			</section>
-
-			{show && <Filter setShow={setShow} />}
 		</main>
 	);
 };
