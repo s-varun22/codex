@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { DropdownLoggedIn, DropdownLoggedOut, Search } from "..";
 import logo from "../../assets/logo.png";
 import { applyDarkMode, getInitialDarkMode } from "../../utils/Theme";
-import { Search } from "../common/Search";
 
 export const Header = () => {
 	const [darkMode, setDarkMode] = useState(getInitialDarkMode);
 	const [searchVisible, setSearchVisible] = useState(false);
+	const [dropdown, setDropdown] = useState(false);
+	const token = sessionStorage.getItem("token");
 
 	const cartList = 0;
 
@@ -45,8 +47,9 @@ export const Header = () => {
 							</span>
 						</Link>
 						<span
-							onClick={() => {}}
+							onClick={() => setDropdown(!dropdown)}
 							className="bi bi-person-circle cursor-pointer text-2xl text-gray-700 dark:text-white"></span>
+						{dropdown && (token ? <DropdownLoggedIn setDropdown={setDropdown} /> : <DropdownLoggedOut setDropdown={setDropdown} />)}
 					</div>
 				</div>
 			</nav>
