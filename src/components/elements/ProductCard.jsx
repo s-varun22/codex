@@ -1,15 +1,31 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { addToCart, removeFromCart } from "../../store/cartSlice";
 import { Rating } from "./Rating";
 
 export const ProductCard = ({ product }) => {
+	const dispatch = useDispatch();
 	const { id, name, overview, rating, price, poster, best_seller, in_stock } = product;
-	const inCart = false;
+	const { cartList, totalPrice } = useSelector((state) => state.cartState);
+
+	const [inCart, setInCart] = useState(false);
+
+	useEffect(() => {
+		const productInCart = cartList.find((item) => item.id === id);
+
+		if (productInCart) {
+			setInCart(true);
+		} else {
+			setInCart(false);
+		}
+	}, [cartList, id]);
 
 	return (
 		<div className="m-3 max-w-sm bg-white dark:border-gray-800 rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 ">
 			<Link to={`/products/${id}`} className="relative">
 				{best_seller && (
-					<span className="absolute top-4 left-2 px-2 bg-orange-500 bg-opacity-90 text-white rounded">Best Seller</span>
+					<span className="absolute top-4 left-2 px-2 bg-orange-500 opacity-90 text-white rounded">Best Seller</span>
 				)}
 				<img className="rounded-t-lg w-full h-64" src={poster} alt={name} />
 			</Link>
@@ -30,13 +46,26 @@ export const ProductCard = ({ product }) => {
 						<span>{price}</span>
 					</span>
 
-					<button
-						className={`inline-flex items-center py-2 px-3 text-sm font-medium text-white rounded-lg ${
-							inCart ? "bg-red-600 hover:bg-red-800" : "bg-blue-700 hover:bg-blue-800"
-						} ${!in_stock ? "cursor-not-allowed opacity-50" : ""}`}
-						disabled={!in_stock}>
-						Add To Cart <i className="ml-1 bi bi-plus-lg"></i>
-					</button>
+					{!inCart && (
+						<button
+							onClick={() => dispatch(addToCart(product))}
+							className={`inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 ${
+								product.in_stock ? "" : "cursor-not-allowed"
+							}`}
+							disabled={product.in_stock ? "" : "disabled"}>
+							Add To Cart <i className="ml-1 bi bi-plus-lg"></i>
+						</button>
+					)}
+					{inCart && (
+						<button
+							onClick={() => dispatch(removeFromCart(product))}
+							className={`inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 ${
+								product.in_stock ? "" : "cursor-not-allowed"
+							}`}
+							disabled={product.in_stock ? "" : "disabled"}>
+							Remove Item <i className="ml-1 bi bi-trash3"></i>
+						</button>
+					)}
 				</p>
 			</div>
 		</div>

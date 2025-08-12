@@ -56,7 +56,7 @@ export const Products = () => {
 			{/* Drawer (mobile only) */}
 			{show && (
 				<>
-					<div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setShow(!show)} />
+					<div className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden" onClick={() => setShow(!show)} />
 					<div className="fixed top-0 left-0 w-72 h-full bg-white dark:bg-gray-800 z-50 shadow-lg transition-transform transform translate-x-0 lg:hidden">
 						<Filter setShow={setShow} />
 					</div>

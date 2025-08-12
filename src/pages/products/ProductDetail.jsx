@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Rating } from "../../components";
 import { useTitle } from "../../hooks/useTitle.jsx";
+import { addToCart, removeFromCart } from "../../store/cartSlice.jsx";
 
 export const ProductDetail = () => {
+	const dispatch = useDispatch();
+	const { cartList } = useSelector((state) => state.cartState);
+	const [inCart, setInCart] = useState(false);
 	const [product, setProduct] = useState({});
+
 	const { id } = useParams();
 
 	useTitle(product.name);
@@ -14,9 +20,22 @@ export const ProductDetail = () => {
 			const response = await fetch(`http://localhost:8000/products/${id}`);
 			const data = await response.json();
 			setProduct(data);
+			if (cartList.find((item) => item.id === product.id)) {
+				setInCart(true);
+			}
 		};
 		fetchProduct();
 	}, [id]);
+
+	useEffect(() => {
+		const productInCart = cartList.find((item) => item.id === product.id);
+
+		if (productInCart) {
+			setInCart(true);
+		} else {
+			setInCart(false);
+		}
+	}, [cartList, product.id]);
 
 	return (
 		<main>
@@ -57,7 +76,28 @@ export const ProductDetail = () => {
 								{product.size} MB
 							</span>
 						</p>
-						<p className="my-3"></p>
+						<p className="my-3">
+							{!inCart && (
+								<button
+									onClick={() => dispatch(addToCart(product))}
+									className={`inline-flex items-center py-2 px-5 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 ${
+										product.in_stock ? "" : "cursor-not-allowed"
+									}`}
+									disabled={product.in_stock ? "" : "disabled"}>
+									Add To Cart <i className="ml-1 bi bi-plus-lg"></i>
+								</button>
+							)}
+							{inCart && (
+								<button
+									onClick={() => dispatch(removeFromCart(product))}
+									className={`inline-flex items-center py-2 px-5 text-lg font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 ${
+										product.in_stock ? "" : "cursor-not-allowed"
+									}`}
+									disabled={product.in_stock ? "" : "disabled"}>
+									Remove Item <i className="ml-1 bi bi-trash3"></i>
+								</button>
+							)}
+						</p>
 						<p className="text-lg text-gray-900 dark:text-slate-200">{product.long_description}</p>
 					</div>
 				</div>
