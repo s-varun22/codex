@@ -19,6 +19,7 @@ export const Register = () => {
 
 		const response = await fetch("http://localhost:8000/register", requestOptions);
 		const data = await response.json();
+		
 		if (data.accessToken) {
 			sessionStorage.setItem("token", JSON.stringify(data.accessToken));
 			sessionStorage.setItem("cid", JSON.stringify(data.user.id));
