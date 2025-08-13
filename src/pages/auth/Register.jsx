@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { setAuthData } from "../../store/authSlice";
 
 export const Register = () => {
 	const navigate = useNavigate();
