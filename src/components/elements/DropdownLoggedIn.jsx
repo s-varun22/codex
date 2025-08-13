@@ -1,11 +1,14 @@
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../store/authSlice";
 
-export const DropdownLoggedIn = ({setDropdown}) => {
+export const DropdownLoggedIn = ({ setDropdown }) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	const handleLogout = () => {
-		sessionStorage.removeItem("token");
-		sessionStorage.removeItem("cid");
-        setDropdown(false);
+		dispatch(logout());
+		setDropdown(false);
 		navigate("/");
 	};
 
@@ -20,7 +23,7 @@ export const DropdownLoggedIn = ({setDropdown}) => {
 				<li>
 					<Link
 						to="/products"
-                        onClick={()=> setDropdown(false)}
+						onClick={() => setDropdown(false)}
 						className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
 						All eBooks
 					</Link>
@@ -28,14 +31,16 @@ export const DropdownLoggedIn = ({setDropdown}) => {
 				<li>
 					<Link
 						to="/dashboard"
-                        onClick={()=> setDropdown(false)}
+						onClick={() => setDropdown(false)}
 						className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
 						Dashboard
 					</Link>
 				</li>
 			</ul>
 			<div className="py-1">
-				<span onClick={handleLogout} className="cursor-pointer block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+				<span
+					onClick={handleLogout}
+					className="cursor-pointer block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
 					Log out
 				</span>
 			</div>

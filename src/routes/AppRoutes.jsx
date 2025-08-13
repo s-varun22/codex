@@ -1,10 +1,8 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Cart, ErrorPage, Home, Login, ProductDetail, Products, Register } from "../pages";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 
 export const AppRoutes = () => {
-	const token = sessionStorage.getItem("token");
-
 	return (
 		<Routes>
 			<Route path="/" element={<Home />} />

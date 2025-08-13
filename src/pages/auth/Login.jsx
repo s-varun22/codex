@@ -1,9 +1,12 @@
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { setAuthData } from "../../store/authSlice";
 
 export const Login = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const email = useRef();
 	const password = useRef();
@@ -23,8 +26,7 @@ export const Login = () => {
 		const data = await response.json();
 
 		if (data.accessToken) {
-			sessionStorage.setItem("token", JSON.stringify(data.accessToken));
-			sessionStorage.setItem("cid", JSON.stringify(data.user.id));
+			dispatch(setAuthData({ token: data.accessToken, userId: data.user.id }));
 			toast.success("Login successful!");
 			navigate("/products");
 		} else {

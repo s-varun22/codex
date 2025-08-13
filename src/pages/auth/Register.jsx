@@ -1,8 +1,10 @@
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const Register = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	async function handleRegister(event) {
 		event.preventDefault();
@@ -21,8 +23,7 @@ export const Register = () => {
 		const data = await response.json();
 		
 		if (data.accessToken) {
-			sessionStorage.setItem("token", JSON.stringify(data.accessToken));
-			sessionStorage.setItem("cid", JSON.stringify(data.user.id));
+			dispatch(setAuthData({ token: data.accessToken, userId: data.user.id }));
 			toast.success("Login successful!");
 			navigate("/products");
 		} else {

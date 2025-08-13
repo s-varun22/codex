@@ -3,14 +3,15 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { DropdownLoggedIn, DropdownLoggedOut, Search } from "..";
 import logo from "../../assets/logo.png";
+import { getToken } from "../../store/authSlice";
 import { applyDarkMode, getInitialDarkMode } from "../../utils/Theme";
 
 export const Header = () => {
 	const [darkMode, setDarkMode] = useState(getInitialDarkMode);
 	const [searchVisible, setSearchVisible] = useState(false);
 	const [dropdown, setDropdown] = useState(false);
-	const token = sessionStorage.getItem("token");
 
+	const token = useSelector(getToken);
 	const cartListLength = useSelector((state) => state.cartState.cartList.length);
 
 	useEffect(() => {
