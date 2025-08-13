@@ -1,11 +1,14 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTitle } from "../../hooks/useTitle";
 import { setAuthData } from "../../store/authSlice";
 
 export const Register = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	useTitle("Register - Codex");
 
 	async function handleRegister(event) {
 		event.preventDefault();

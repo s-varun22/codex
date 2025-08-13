@@ -6,8 +6,10 @@ import { DashboardCard } from "./components/DashboardCard";
 import { EmptyDashboard } from "./components/EmptyDashboard";
 
 export const Dashboard = () => {
+	
+	useTitle("My Dashboard");
+
 	const [orders, setOrders] = useState([]);
-	useTitle("Dashboard");
 
 	useEffect(() => {
 		const fetchOrders = async () => {
