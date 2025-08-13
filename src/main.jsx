@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")).render(
 		<Provider store={store}>
 			<BrowserRouter>
 				<ScrollToTop />
-				<ToastContainer position="top-center"/>
+				<ToastContainer position="top-center" />
 				<App />
 			</BrowserRouter>
 		</Provider>
