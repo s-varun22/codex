@@ -14,6 +14,11 @@ export const Header = () => {
 	const token = useSelector(getToken);
 	const cartListLength = useSelector((state) => state.cartState.cartList.length);
 
+	const handleSearchToggle = () => {
+		setSearchVisible(!searchVisible);
+		setDropdown(false);
+	};
+
 	useEffect(() => {
 		applyDarkMode(darkMode);
 	}, [darkMode]);
@@ -39,9 +44,9 @@ export const Header = () => {
 							)}
 						</span>
 						<span
-							onClick={() => setSearchVisible(!searchVisible)}
+							onClick={handleSearchToggle}
 							className="cursor-pointer text-xl text-gray-700 dark:text-white mr-5 bi bi-search"></span>
-						<Link to="/cart" className="text-gray-700 dark:text-white mr-5">
+						<Link to="/cart" onClick={() => setDropdown(false)} className="text-gray-700 dark:text-white mr-5">
 							<span className="text-2xl bi bi-cart-fill relative">
 								<span className="text-white text-sm absolute -top-1 left-2.5 bg-rose-500 px-1 rounded-full ">
 									{cartListLength}
@@ -66,12 +71,19 @@ export const Header = () => {
 					<div className="flex items-center">
 						<ul className="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
 							<li>
-								<Link to="/" className="text-gray-900 dark:text-white hover:underline" aria-current="Home Page">
+								<Link
+									to="/"
+									onClick={() => setDropdown(false)}
+									className="text-gray-900 dark:text-white hover:underline"
+									aria-current="Home Page">
 									Home
 								</Link>
 							</li>
 							<li>
-								<Link to="/products" className="text-gray-900 dark:text-white hover:underline">
+								<Link
+									to="/products"
+									onClick={() => setDropdown(false)}
+									className="text-gray-900 dark:text-white hover:underline">
 									Products
 								</Link>
 							</li>
