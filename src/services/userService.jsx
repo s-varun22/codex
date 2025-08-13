@@ -1,7 +1,7 @@
 import { getToken, getUserId } from "../store/authSlice";
 import { store } from "../store/store";
 
-export async function getUser() {
+export const getUser = async () => {
 	const token = getToken(store.getState());
 	const userId = getUserId(store.getState());
 	const requestOptions = {
@@ -14,4 +14,4 @@ export async function getUser() {
 	}
 	const data = await response.json();
 	return data;
-}
+};

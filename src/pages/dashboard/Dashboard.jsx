@@ -10,14 +10,14 @@ export const Dashboard = () => {
 	useTitle("Dashboard");
 
 	useEffect(() => {
-		async function fetchOrders() {
+		const fetchOrders = async () => {
 			try {
 				const data = await getUserOrders();
 				setOrders(data);
 			} catch (error) {
 				toast.error(error.message, { closeButton: true, position: "bottom-center" });
 			}
-		}
+		};
 		fetchOrders();
 	}, []);
 

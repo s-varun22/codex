@@ -16,18 +16,18 @@ export const Checkout = ({ setCheckout }) => {
 	const [user, setUser] = useState({});
 
 	useEffect(() => {
-		async function getUserData() {
+		const getUserData = async () => {
 			try {
 				const data = await getUser();
 				setUser(data);
 			} catch (error) {
 				toast.error(error.message, { closeButton: true, position: "bottom-center" });
 			}
-		}
+		};
 		getUserData();
 	}, []);
 
-	async function handleSubmit(event) {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
 			const data = await createOrder(orderItems, totalPrice, user);
@@ -37,7 +37,7 @@ export const Checkout = ({ setCheckout }) => {
 			toast.error(error.message, { closeButton: true, position: "bottom-center" });
 			navigate("/order-summary", { state: { status: false } });
 		}
-	}
+	};
 
 	return (
 		<section>

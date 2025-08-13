@@ -1,7 +1,7 @@
 import { getToken, getUserId } from "../store/authSlice";
 import { store } from "../store/store";
 
-export async function createOrder(cartItems, amount, user) {
+export const createOrder = async (cartItems, amount, user) => {
 	const token = getToken(store.getState());
 
 	const order = {
@@ -27,9 +27,9 @@ export async function createOrder(cartItems, amount, user) {
 
 	const data = await response.json();
 	return data;
-}
+};
 
-export async function getUserOrders() {
+export const getUserOrders = async () => {
 	const token = getToken(store.getState());
 	const userId = getUserId(store.getState());
 
@@ -44,4 +44,4 @@ export async function getUserOrders() {
 	}
 	const data = await response.json();
 	return data;
-}
+};

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { login } from "../../services";
 import { setAuthData } from "../../store/authSlice";
 
 export const Login = () => {
@@ -11,28 +12,25 @@ export const Login = () => {
 	const email = useRef();
 	const password = useRef();
 
-	async function handleLogin(event) {
+	const handleLogin = async (event) => {
 		event.preventDefault();
-		const authDetail = {
-			email: email.current.value,
-			password: password.current.value,
-		};
-		const requestOptions = {
-			method: "POST",
-			headers: { "content-Type": "application/json" },
-			body: JSON.stringify(authDetail),
-		};
-		const response = await fetch("http://localhost:8000/login", requestOptions);
-		const data = await response.json();
+		try {
+			const authDetail = {
+				email: email.current.value,
+				password: password.current.value,
+			};
+			const data = await login(authDetail);
 
-		if (data.accessToken) {
-			dispatch(setAuthData({ token: data.accessToken, userId: data.user.id }));
-			toast.success("Login successful!");
-			navigate("/products");
-		} else {
-			toast.error(data);
+			if (data.accessToken) {
+				dispatch(setAuthData({ token: data.accessToken, userId: data.user.id }));
+				navigate("/products");
+			} else {
+				toast.error(data);
+			}
+		} catch (error) {
+			toast.error(error.message, { closeButton: true, position: "bottom-center" });
 		}
-	}
+	};
 
 	return (
 		<main>
