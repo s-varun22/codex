@@ -1,30 +1,43 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getToken, getUserId } from "../../../store/authSlice";
+import { clearCart } from "../../../store/cartSlice";
+import { createOrder, getUser } from "../../../services";
 
 export const Checkout = ({ setCheckout }) => {
-	const totalPrice = useSelector((state) => state.cartState.totalPrice);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	const token = useSelector(getToken);
-	const userId = useSelector(getUserId);
+	const orderItems = useSelector((state) => state.cartState.cartList);
+	const totalPrice = useSelector((state) => state.cartState.totalPrice);
 
 	const [user, setUser] = useState({});
 
 	useEffect(() => {
-
 		async function getUserData() {
-			const response = await fetch(`http://localhost:8000/600/users/${userId}`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			const data = await response.json();
-			setUser(data);
+			try {
+				const data = await getUser();
+				setUser(data);
+			} catch (error) {
+				toast.error(error.message, { closeButton: true, position: "bottom-center" });
+			}
 		}
 		getUserData();
 	}, []);
+
+	async function handleSubmit(event) {
+		event.preventDefault();
+		try {
+			const data = await createOrder(orderItems, totalPrice, user);
+			dispatch(clearCart());
+			navigate("/order-summary", { state: { data: data, status: true } });
+		} catch (error) {
+			toast.error(error.message, { closeButton: true, position: "bottom-center" });
+			navigate("/order-summary", { state: { status: false } });
+		}
+	}
 
 	return (
 		<section>
@@ -59,7 +72,7 @@ export const Checkout = ({ setCheckout }) => {
 							<h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
 								<i className="bi bi-credit-card mr-2"></i>CARD PAYMENT
 							</h3>
-							<form className="space-y-6">
+							<form className="space-y-6" onSubmit={handleSubmit}>
 								<div>
 									<label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
 										Name:
