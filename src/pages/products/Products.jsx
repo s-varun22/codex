@@ -5,17 +5,16 @@ import { useLocation } from "react-router-dom";
 import { useTitle } from "../../hooks/useTitle.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { products } from "../../store/filterSlice";
+import { getProducts } from "../../services";
 
 export const Products = () => {
 	const dispatch = useDispatch();
 	const [show, setShow] = useState(false);
 
 	const search = useLocation().search;
-	const queryTerm = new URLSearchParams(search).get("query");
+	const searchTerm = new URLSearchParams(search).get("query");
 
-	useTitle(queryTerm ? `Search Results - ${queryTerm}` : "Explore eBooks");
-
-	const api = queryTerm ? `http://localhost:8000/products?name_like=${queryTerm}` : "http://localhost:8000/products/";
+	useTitle(searchTerm ? `Search Results - ${searchTerm}` : "Explore eBooks");
 
 	const { allProducts, inStockOnly, bestSellerOnly, sortBy, ratings } = useSelector((state) => state.filterState);
 
@@ -37,8 +36,7 @@ export const Products = () => {
 
 	useEffect(() => {
 		const fetchProducts = async () => {
-			const response = await fetch(api);
-			const data = await response.json();
+			const data = await getProducts(searchTerm);
 			dispatch(products(data));
 		};
 		fetchProducts();

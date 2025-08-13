@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Rating } from "../../components";
 import { useTitle } from "../../hooks/useTitle.jsx";
+import { getProduct } from "../../services/productService.jsx";
 import { addToCart, removeFromCart } from "../../store/cartSlice.jsx";
 
 export const ProductDetail = () => {
@@ -17,9 +18,8 @@ export const ProductDetail = () => {
 
 	useEffect(() => {
 		const fetchProduct = async () => {
-			const response = await fetch(`http://localhost:8000/products/${id}`);
-			const data = await response.json();
-			setProduct(data);
+			const product = await getProduct(id);
+			setProduct(product);
 			if (cartList.find((item) => item.id === product.id)) {
 				setInCart(true);
 			}
