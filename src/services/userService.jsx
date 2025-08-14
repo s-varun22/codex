@@ -8,7 +8,7 @@ export const getUser = async () => {
 		method: "GET",
 		headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
 	};
-	const response = await fetch(`http://localhost:8000/600/users/${userId}`, requestOptions);
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}600/users/${userId}`, requestOptions);
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };
 	}

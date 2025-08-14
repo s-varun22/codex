@@ -5,6 +5,7 @@ import { Rating } from "../../components";
 import { useTitle } from "../../hooks/useTitle.jsx";
 import { getProduct } from "../../services/productService.jsx";
 import { addToCart, removeFromCart } from "../../store/cartSlice.jsx";
+import { toast } from "react-toastify";
 
 export const ProductDetail = () => {
 	const dispatch = useDispatch();
@@ -18,10 +19,12 @@ export const ProductDetail = () => {
 
 	useEffect(() => {
 		const fetchProduct = async () => {
-			const product = await getProduct(id);
-			setProduct(product);
-			if (cartList.find((item) => item.id === product.id)) {
-				setInCart(true);
+			try {
+				const product = await getProduct(id);
+				setProduct(product);
+			} catch (error) {
+
+				toast.error(error.message, { closeButton: true, position: "bottom-center" });
 			}
 		};
 		fetchProduct();

@@ -5,7 +5,7 @@ export const login = async (authDetail) => {
 		body: JSON.stringify(authDetail),
 	};
 
-	const response = await fetch("http://localhost:8000/login", requestOptions);
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}login`, requestOptions);
 
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };
@@ -21,7 +21,7 @@ export const register = async (authDetail) => {
 		body: JSON.stringify(authDetail),
 	};
 
-	const response = await fetch("http://localhost:8000/register", requestOptions);
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}register`, requestOptions);
 
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };

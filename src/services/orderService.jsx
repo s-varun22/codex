@@ -20,7 +20,7 @@ export const createOrder = async (cartItems, amount, user) => {
 		body: JSON.stringify(order),
 	};
 
-	const response = await fetch("http://localhost:8000/660/orders", requestOptions);
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}660/orders`, requestOptions);
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };
 	}
@@ -38,7 +38,7 @@ export const getUserOrders = async () => {
 		headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
 	};
 
-	const response = await fetch(`http://localhost:8000/660/orders?user.id=${userId}`, requestOptions);
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}660/orders?user.id=${userId}`, requestOptions);
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };
 	}

@@ -1,5 +1,5 @@
 export const getProducts = async (searchTerm) => {
-	const url = searchTerm ? `http://localhost:8000/444/products?name_like=${searchTerm}` : "http://localhost:8000/444/products";
+	const url = searchTerm ? `${import.meta.env.VITE_HOST_URL}444/products?name_like=${searchTerm}` : `${import.meta.env.VITE_HOST_URL}444/products`;
 
 	const response = await fetch(url);
 
@@ -11,7 +11,7 @@ export const getProducts = async (searchTerm) => {
 };
 
 export const getProduct = async (id) => {
-	const response = await fetch(`http://localhost:8000/444/products/${id}`);
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}444/products/${id}`);
 
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };
@@ -21,7 +21,7 @@ export const getProduct = async (id) => {
 };
 
 export const getFeaturedProducts = async () => {
-	const response = await fetch("http://localhost:8000/444/featured_products");
+	const response = await fetch(`${import.meta.env.VITE_HOST_URL}444/featured_products`);
 
 	if (!response.ok) {
 		throw { message: response.statusText, status: response.status };

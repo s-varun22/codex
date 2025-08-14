@@ -6,6 +6,7 @@ import { useTitle } from "../../hooks/useTitle.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { products } from "../../store/filterSlice";
 import { getProducts } from "../../services";
+import { toast } from "react-toastify";
 
 export const Products = () => {
 	const dispatch = useDispatch();
@@ -36,8 +37,12 @@ export const Products = () => {
 
 	useEffect(() => {
 		const fetchProducts = async () => {
-			const data = await getProducts(searchTerm);
-			dispatch(products(data));
+			try {
+				const data = await getProducts(searchTerm);
+				dispatch(products(data));
+			} catch (error) {
+				toast.error(error.message, { closeButton: true, position: "bottom-center" });
+			}
 		};
 		fetchProducts();
 	}, []);
